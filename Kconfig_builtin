@@ -1,0 +1,42 @@
+menu "SiW Touch Support (Automotive & Large)"
+
+config TOUCHSCREEN_SIW
+	tristate "Silicon Works Touch Driver Core"
+	depends on SPI_MASTER || I2C
+	default n
+	help
+	  Say Y here if you have a touchscreen interface using
+	  the Silicon Works touch device.
+
+config TOUCHSCREEN_SIW_SW1828
+	bool "Silicon Works Touch Driver for SW1828(Auto)"
+	depends on TOUCHSCREEN_SIW
+	default n
+	help
+	  If your device is SW1828, say Y
+
+config TOUCHSCREEN_SIW_SW42103
+	bool "Silicon Works Touch Driver for SW42103(Auto)"
+	depends on TOUCHSCREEN_SIW
+	default n
+	help
+	  If your device is SW42103, say Y
+
+config TOUCHSCREEN_SIW_SW17700
+	bool "Silicon Works Touch Driver for SW17700(Auto)"
+	depends on TOUCHSCREEN_SIW
+	default n
+	help
+	  If your device is SW17700, say Y
+
+config TOUCHSCREEN_SIW_SW42101
+	bool "Silicon Works Touch Driver for SW42101(Large)"
+	depends on TOUCHSCREEN_SIW
+	default n
+	help
+	  If your device is SW42101, say Y
+
+source "drivers/input/touchscreen/siw/mon/Kconfig"
+
+endmenu
+
