@@ -1,0 +1,70 @@
+/*
+ * SiW Touch device tree source for Odroid-XU4 (Samsung Exynos5422)
+ *
+ * Copyright (c) 2016 Silicon Works - http://www.siliconworks.co.kr
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+*/
+#include <dt-bindings/gpio/gpio.h>
+
+&i2c_1 {					// indicates parent device : I2C_1 adapter block
+	sw42103@28 {				// define new client device(sw42103), slave addr is 0x28
+		status = "okay";
+		compatible = "siw,sw42103";	// compatible name (see touch_sw42103.c)
+		reg = <0x28>;
+		interrupt-parent = <&gpx1>;
+		interrupts = <6 0x02>;
+		irqflags = <0x2002>;
+
+		chip_flags = <0x100>;
+
+		reset-gpio = <&gpx1 7 GPIO_ACTIVE_LOW>;
+		irq-gpio = <&gpx1 6 GPIO_ACTIVE_LOW>;
+
+		// Caps
+		/* Resolution
+		 *
+		 * LA171DG1 : 2200 x 1330
+		 * LA145WF1 : 2560 x  720
+		 *
+		 *     [17.1] [14.5] [14.3] [11.9] [ 9.5]
+		 * X :	2200   2560   1800   1624   1624
+		 * Y :	1300    720   1728   1000
+		 */
+		max_x = <2200>;
+		max_y = <1300>;
+		max_pressure = <0xff>;
+		max_width = <15>;
+		max_orientation = <1>;
+		max_id = <10>;
+		mt_slots_flags = <0x0002>;	// INPUT_MT_DIRECT
+		hw_reset_delay = <210>;
+		sw_reset_delay = <90>;
+
+		// role
+		use_lpwg = <0>;
+		use_lpwg_test = <0>;
+
+		// firmware
+		use_firmware = <0>;		// enable firmware control
+		use_fw_upgrade = <0>;		// auto-update during driver initialization
+		fw_image = "siw/sw42103/LA145WF1_0_02.img";	// in android -> /lib/firmware/siw/...
+	//	panel_spec = "siw/sw42103/ph1_limit.txt";
+	//	panel_spec_mfts = "siw/sw42103/ph1_limit_mfts.txt";
+
+		//absoulte path
+		prd_in_file = "/sdcard/siw/sw42103_test_spec_V0.1.txt";
+		prd_in_file_m = "/sdcard/siw/sw42103_test_spec_mfts_V0.1.txt";
+		prd_out_file = "/sdcard/siw/touch_self_test.txt";
+	//	prd_out_file_mo_aat = "/sdcard/siw/touch_self_mfts_aat.txt";
+	//	prd_out_file_mo_mfo = "/sdcard/siw/touch_self_mfts_mfo.txt";
+	//	prd_out_file_mo_mfl = "/sdcard/siw/touch_self_mfts_mfl.txt";
+	//	prd_out_file_mo_mcv = "/sdcard/siw/touch_self_mfts_mcv.txt";
+	};
+};
+
+
+
+

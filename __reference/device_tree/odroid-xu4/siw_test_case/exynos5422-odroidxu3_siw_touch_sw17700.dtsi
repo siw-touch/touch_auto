@@ -1,0 +1,72 @@
+/*
+ * SiW Touch device tree source for Odroid-XU4 (Samsung Exynos5422)
+ *
+ * Copyright (c) 2016 Silicon Works - http://www.siliconworks.co.kr
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+*/
+#include <dt-bindings/gpio/gpio.h>
+
+&i2c_1 {					// indicates parent device : I2C_1 adapter block
+	sw17700@28 {				// define new client device(sw17700), slave addr is 0x28
+		status = "okay";
+		compatible = "siw,sw17700";	// compatible name (see touch_sw17700.c)
+		reg = <0x28>;
+		interrupt-parent = <&gpx1>;
+		interrupts = <6 0x02>;
+		irqflags = <0x2002>;
+
+		chip_flags = <0x0>;
+
+		reset-gpio = <&gpx1 7 GPIO_ACTIVE_LOW>;
+		irq-gpio = <&gpx1 6 GPIO_ACTIVE_LOW>;
+
+		// Caps
+		/* Resolution
+		 *
+		 * LA123WF7 : 1920 x 720
+		 * LA103WF5 : 1920 x 720
+		 * LA102WH3 : 1280 x 720
+		 * LA080WH1 : 1280 x 720
+		 *
+		 *     [10.25] [12.3] [10.2] [8.0]
+		 * X :	1920    1920   1280  1280
+		 * Y :	 720     720    720   720
+		 */
+		max_x = <1920>;
+		max_y = <720>;
+		max_pressure = <0xff>;
+		max_width = <15>;
+		max_orientation = <1>;
+		max_id = <10>;
+		hw_reset_delay = <210>;
+		sw_reset_delay = <90>;
+
+		// role
+		use_lpwg = <0>;
+		use_lpwg_test = <0>;
+
+		// firmware
+		use_firmware = <0>;		// enable firmware control
+		use_fw_upgrade = <0>;		// auto-update during driver initialization
+		fw_image = "siw/sw17700/LA103WF5_0_01.img";	// in android -> /lib/firmware/siw/...
+	//	fw_image = "{root}/siw/sw17700/LA103WF5_0_01.img";	// in android -> /siw/... (absolute path)
+	//	panel_spec = "siw/sw17700/ph1_limit.txt";
+	//	panel_spec_mfts = "siw/sw17700/ph1_limit_mfts.txt";
+
+		//absoulte path
+		prd_in_file = "/sdcard/siw/sw17700_test_spec_V0.1.txt";
+		prd_in_file_m = "/sdcard/siw/sw17700_test_spec_mfts_V0.1.txt";
+		prd_out_file = "/sdcard/siw/touch_self_test.txt";
+	//	prd_out_file_mo_aat = "/sdcard/siw/touch_self_mfts_aat.txt";
+	//	prd_out_file_mo_mfo = "/sdcard/siw/touch_self_mfts_mfo.txt";
+	//	prd_out_file_mo_mfl = "/sdcard/siw/touch_self_mfts_mfl.txt";
+	//	prd_out_file_mo_mcv = "/sdcard/siw/touch_self_mfts_mcv.txt";
+	};
+};
+
+
+
+
