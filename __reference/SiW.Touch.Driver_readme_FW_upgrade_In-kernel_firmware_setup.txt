@@ -1,0 +1,132 @@
+[Last updated : 2019.12.02]
+
+<Caution>
+ This guide is based on basic kernel methodology, but the actual case depends on your BSP policy.
+
+###################################################################################################
+# Setup for built-in Firmware                                                                     #
+###################################################################################################
+
+<v5.1.y or later : {kernel top}/drivers/base/firmware_loader/builtin/>
+1. Copy the FW image file into kernel firmware folder
+   <Example>
+   {kernel top}/drivers/base/firmware_loader/builtin/siw/sw82905/sw82905_8_01.img
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ (path is up to you)
+2. Edit Makefile and add firmware path with build option
+   {kernel top}/drivers/base/firmware_loader/builtin/Makefile
+   ...
+   fw-shipped-$(CONFIG_TOUCHSCREEN_SIW_SW82905) += siw/sw82905/sw82905_8_01.img
+   ...                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ (relative path)
+
+* {kernel_top}/driver/base/firmware_loader/main.c
+  request_firmware > _request_firmware > _request_firmware_prepare > fw_get_builtin_firmware
+
+---------------------------------------------------------------------------------------------------
+
+<v5.0.y or less : {kernel top}/firmware/>
+1. Copy the FW image file into kernel firmware folder
+   <Example>
+   {kernel top}/firmware/siw/sw82905/sw82905_8_01.img
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ (path is up to you)
+2. Edit Makefile and add firmware path with build option
+   {kernel top}/firmware/Makefile
+   ...
+   fw-shipped-$(CONFIG_TOUCHSCREEN_SIW_SW82905) += siw/sw82905/sw82905_8_01.img
+   ...                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ (relative path)
+
+* {kernel_top}/driver/base/firmware_class.c
+  request_firmware > _request_firmware > _request_firmware_prepare > fw_get_builtin_firmware
+
+###################################################################################################
+# Setup for Device Tree                                                                           #
+###################################################################################################
+
+1. Set each value following example
+   ...
+   use_firmware = <1>;                            // enable firmware control
+   use_fw_upgrade = <1>;                          // auto-update during driver initialization (probe stage)
+   fw_image = "siw/sw82905/sw82905_0_01.img";     // relative path for request_firmware
+
+###################################################################################################
+# Log example                                                                                     #
+###################################################################################################
+
+/*
+ * Probe and init done
+ */
+...
+[ 3853.597394] [c4] siw_touch spi1.0: threaded irq request done(512, siw_touch, 0x2002)
+[ 3853.604893] [c4] siw_touch spi1.0: irq(512) disabled
+[ 3853.609865] [c4] siw_touch spi1.0: probe(normal) done
+[ 3853.609906] [c0] siw_touch spi1.0: SW82905 init work start(v2.22b)
+...
+[ 3853.614188] [c0] siw_touch spi1.0: [T] chip id 7601(82905), version v0.01 (0x040A0001, 0x00)
+[ 3853.614199] [c0] siw_touch spi1.0: [T] product id B2W80TMP, flash boot idle(done), crc ok (0x00000004)
+[ 3853.614766] [c0] siw_touch spi1.0: [SW82905] IC info is good: 10, 4
+...
+[ 3853.647207] [c0] siw_touch spi1.0: SW82905 init done
+[ 3853.647224] [c0] siw_touch spi1.0: irq(512) enabled
+[ 3853.647234] [c0] siw_touch spi1.0: irq(512) wake enabled
+
+/*
+ * FW upgrade automatically triggered once when use_fw_upgrade option is on
+ */
+[ 3853.647243] [c0] siw_touch spi1.0: Touch F/W upgrade triggered(1h)
+[ 3853.647279] [c0] siw_touch spi1.0: FW upgrade work func
+[ 3853.647289] [c0] siw_touch spi1.0: irq(512) wake disabled
+[ 3853.647298] [c0] siw_touch spi1.0: irq(512) disabled
+[ 3853.647307] [c0] siw_touch spi1.0: FW upgrade: status 1(BUSY)
+[ 3853.647315] [c0] siw_touch spi1.0: fw type: FW_TYPE_OLED
+[ 3853.647329] [c0] siw_touch spi1.0: getting fw from file
+[ 3853.647338] [c0] siw_touch spi1.0: target fw: siw/sw82905/sw82905_8_01.img (rel)    //rel : relative path
+[ 3853.647349] [c0] siw_touch spi1.0: fw size: 131072
+[ 3853.647362] [c0] siw_touch spi1.0: FW compare: bin-ver: 8.01 (B2W80OPP)(0)
+[ 3853.647371] [c0] siw_touch spi1.0: FW compare: dev-ver: 0.01 (B2W80OPP)
+//FW upgrade will work when the version of binary is higher than the current version in device
+[ 3853.647380] [c0] siw_touch spi1.0: FW compare: up 02, fup 00
+[ 3853.649263] [c0] siw_touch spi1.0: FW chk_crc: code crc ok, 948A3703h
+[ 3853.649439] [c0] siw_touch spi1.0: FW upgrade: TC stop(0C03h, 0x00000004)
+[ 3853.786576] [c0] siw_touch spi1.0: ===== FW upgrade: start (0) =====
+[ 3853.786588] [c0] siw_touch spi1.0: FW upgrade: not include conf data
+[ 3853.786599] [c0] siw_touch spi1.0: FW chk_img: code size 20000h, code crc 948A3703h
+[ 3853.901219] [c0] siw_touch spi1.0: FW upgrade: flash mass erase done
+[ 3854.022698] [c1] siw_touch spi1.0: FW upgrade: downloading...(6%)
+[ 3854.133996] [c2] siw_touch spi1.0: FW upgrade: downloading...(12%)
+...
+[ 3855.753753] [c2] siw_touch spi1.0: FW upgrade: downloading...(100%)
+[ 3856.081801] [c3] siw_touch spi1.0: FW upgrade: flash crc result(008Ch) 800D800Dh
+[ 3856.087953] [c3] siw_touch spi1.0: FW upgrade: flash crc pass(008Dh) 1h
+[ 3856.196598] [c3] siw_touch spi1.0: FW upgrade: flash crc check done
+[ 3856.411571] [c3] siw_touch spi1.0: ===== FW upgrade: done (0) =====
+[ 3856.416368] [c3] siw_touch spi1.0: FW upgrade: status 0(OK)
+
+/*
+ * Automatic reset after FW upgrade
+ */
+[ 3856.421954] [c3] siw_touch spi1.0: SW82905 reset control(0x1)
+[ 3856.427668] [c3] siw_touch spi1.0: HW Reset(Async)
+[ 3856.432457] [c3] siw_touch spi1.0: (W) (warn) already irq disabled
+[ 3856.646594] [c3] siw_touch spi1.0: SW82905 init work start(v2.22b)
+[ 3856.655510] [c3] siw_touch spi1.0: [T] chip id 7601(82905), version v8.01 (0x040A0801, 0x00)
+[ 3856.662500] [c3] siw_touch spi1.0: [T] product id B2W80TMP, flash boot idle(done), crc ok (0x00000004)
+[ 3856.672440] [c3] siw_touch spi1.0: [SW82905] IC info is good: 10, 4
+...
+
+###################################################################################################
+# Version check via adb                                                                           #
+###################################################################################################
+
+$ cat /sys/devices/virtual/input/siw_touch_input/version
+chip : SW82905
+version : v8.01
+revision : 0
+product id : B2W80TMP
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+
+

@@ -1,0 +1,144 @@
+[Last updated : 2018.11.07]
+
+###################################################################################################
+# Sysfs access                                                                                    #
+###################################################################################################
+
+The SiW Touch Driver supports manual FW upgrade via sysfs atttr
+and there are two types of path setup.
+- Absolute Path : via filp_open API
+- Relative Path : via request_firmware API
+
+The basic command format for FW upgrade is like this
+# echo [Path type]/target_image.img > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+
+###################################################################################################
+# Absolute Path                                                                                   #
+###################################################################################################
+* This type uses general filp_open API and you are free to use any folders you want.
+  But, you have to type keyword and the accurate middle path.
+
+  # echo {root}/sdcard/firmware/target_image.img > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+  # echo {root}/data/target_image.img > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+
+* {root}
+  This is the keyword signal that let the driver know it is absolute path parameter.
+
+###################################################################################################
+# Relative Path                                                                                   #
+###################################################################################################
+* For using relative path access, the firmware path shoudl be registered in kernel before build
+  You can find out your own path setup in the file of 'firmware_class.c'
+  
+  <[Kernel Top]/drivers/base/firmware_class.c>
+  static char fw_path_para[256];
+  static const char * const fw_path[] = {      //The case of SiW test kernel
+      fw_path_para,
+      "/lib/firmware/updates/" UTS_RELEASE,
+      "/lib/firmware/updates",
+      "/lib/firmware/" UTS_RELEASE,
+      "/lib/firmware"
+  };
+
+* If your FW file is stored in one of the upper folder list,
+  you have only to type like this without the middle path.
+  
+  # echo target_image.imag > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+
+  In this case, the FW upgarde function uses reqiest_firmware API
+  which searches the target file through the registered fw_path folders.
+
+  It has a strong possibility that these folders has read-only permission.
+
+* Tip to avoid read-only restriction
+  You can use the symbolic link if you want to avoid the limit of permission.
+
+  <Example>
+  (1) Make symbolic link in '/lib/firmware/' via ramdisk setup before kernel build
+      /lib/firmware # ln -s /sdcard/firmware sdcard_firmware
+      /lib/firmware # ll
+      lrw-r--r-- root root 2016-12-12 07:11 sdcard_firmware -> /sdcard/firmware
+      
+      > The /sdcard/firmware/ is a write-allowed folder
+
+  (2) After kernel booting, you can find the symbolic link in the root file system on your machine
+
+  (3) Copy the FW file into the /sdcard/firmware/
+
+  (4) Use the command like this
+      # echo /sdcard_firmware/target_image.imag > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+
+      > The request_firmware API will find the final target path '/lib/firmware/sdcard/firmware/'
+        combining the base '/lib/firmare' and the symbloic link 'sdcard_firmware'
+
+###################################################################################################
+# Built-in with header file                                                                       #
+###################################################################################################
+* The Touch Driver also supports builtin configuration with binary image data
+
+  (1) How to generate header file with fw image data
+    - General linux desktop(e.g. Ubuntu) supports 'xxd' command
+      $ xxd -i {input binary file} > {output header file}
+      ex)
+      $ xxd -i LA103WF5_0_01.img > LA103WF5_0_01.h
+
+    - Output header file format
+      <See LA103WF5_0_01.h>
+      unsigned char LA103WF5_0_01_img[] = {
+          0x38, 0x23, 0x00, 0x20, 0x61, 0x03, 0x00, 0x00, 0x69, 0x03, 0x00, 0x00,
+          ...
+      };
+      unsigned int LA103WF5_0_01_img_len = 66560;
+
+  (2) How to setup driver
+    - Entry configuration supports binary built-in setup
+      <See touch_xxxxx.c>
+
+      //Flag setup
+      #define CHIP_FLAGS    (0 |   \
+                            ...
+                            TOUCH_USE_FW_BINARY |  \
+                            ...
+                            0)
+      //FW header setup
+      #include "LA103WF5_0_01_img.h"
+
+      //Data configuration
+      struct siw_touch_fw_bin chip_fw_bin = {
+          .fw_data = LA103WF5_0_01_img,
+          .fw_size = sizeof(LA103WF5_0_01_img),
+      }
+
+      static struct siw_touch_pdata chip_pdata = {
+          ...
+          .fw_bin             = (void *)&chip_fw_bin,
+      },
+
+  (3) Manual access via sysfs
+      $ echo {bin} > /sys/devices/virtual/input/siw_touch_input/fw_upgrade
+
+* {bin}
+  This is the keyword signal that let the driver know it has to use built-in image data.
+
+###################################################################################################
+# Automatic upgrade in probe stage                                                                #
+###################################################################################################
+* You can set automatic upgrade operation with DTS setup.
+
+  (1) Change this property in device tree,
+  
+      use_fw_upgrade = <1>,
+
+  (2) This enables automatic upgrade process when probe stage.
+
+  (3) But, this automatic scheme doesn't always upgrade fw actually.
+      It has version comparison scheme and skips upgrade unless the image is new.
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+
+
