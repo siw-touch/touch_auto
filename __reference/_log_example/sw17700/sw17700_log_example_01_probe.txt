@@ -1,0 +1,139 @@
+
+---------------------------------------------------------------------------------------------------
+
+//insmod ssw17700.ko
+
+[ 2634.089923] [c0] siw_touch: SW17700 driver init - vA0.01b
+[ 2634.112596] [c7] siw_touch 5-0028: dev bus probe : 12c70000.i2c/i2c-5/5-0028
+[ 2634.119479] [c7] siw_touch 5-0028: cfg status : __SIW_PANEL_CLASS_AUTO
+[ 2634.125935] [c7] siw_touch 5-0028: cfg status : __SIW_CONFIG_SYSTEM_PM
+[ 2634.132468] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_PINCTRL
+[ 2634.138851] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_PWRCTRL
+[ 2634.145272] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_PRD
+[ 2634.151359] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_PROBE_POST_RETRY
+[ 2634.158549] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_INIT_RETRY
+[ 2634.165225] [c7] siw_touch 5-0028: cfg status : __SIW_SUPPORT_MON_THREAD
+[ 2634.171906] [c7] siw_touch 5-0028: max finger : 10
+[ 2634.176681] [c7] siw_touch 5-0028: chip type  : 0x7700
+[ 2634.181799] [c7] siw_touch 5-0028: mode bit   : 0x00000048
+[ 2634.187267] [c7] siw_touch 5-0028: chip id    : 1770
+[ 2634.192214] [c7] siw_touch 5-0028: chip name  : SW17700
+[ 2634.197420] [c7] siw_touch 5-0028: drv name   : siw_touch
+[ 2634.202796] [c7] siw_touch 5-0028: idrv name  : siw_touch_input
+[ 2634.208696] [c7] siw_touch 5-0028: SiW Touch Probe
+[ 2634.213471] [c7] siw_touch 5-0028: SW17700 quirks = 0x00000000
+[ 2634.219285] [c7] siw_touch 5-0028: (W) SW17700 ops is NULL : default ops selected
+[ 2634.226751] [c7] siw_touch 5-0028: SW17700 reg quirks: [0] 0041h -> 00BEh
+[ 2634.233515] [c7] siw_touch 5-0028: SW17700 reg quirks: [1] 0000h -> 0100h
+[ 2634.240279] [c7] siw_touch 5-0028: SW17700 reg quirks: [2] 0006h -> 0082h
+[ 2634.247051] [c7] siw_touch 5-0028: SW17700 reg quirks: [3] 000Fh -> 0002h
+[ 2634.253817] [c7] siw_touch 5-0028: SW17700 reg quirks: [4] 0010h -> 0003h
+[ 2634.260584] [c7] siw_touch 5-0028: SW17700 reg quirks: [5] 0011h -> 0107h
+[ 2634.267352] [c7] siw_touch 5-0028: SW17700 reg quirks: [6] 0021h -> 010Ch
+[ 2634.274118] [c7] siw_touch 5-0028: SW17700 reg quirks: [7] 027Ch -> 0101h
+[ 2634.280886] [c7] siw_touch 5-0028: SW17700 reg quirks: [8] 02F9h -> 024Ch
+[ 2634.287656] [c7] siw_touch 5-0028: SW17700 reg quirks: [9] 0300h -> 0FD0h
+[ 2634.294424] [c7] siw_touch 5-0028: SW17700 reg quirks: [10] 0301h -> 0FD1h
+[ 2634.301278] [c7] siw_touch 5-0028: SW17700 reg quirks: [11] 0303h -> 0FD3h
+[ 2634.308133] [c7] siw_touch 5-0028: SW17700 reg quirks: ...
+[ 2634.313600] [c7] siw_touch 5-0028: SW17700 reg quirks: t 17, m 0
+[ 2634.319586] [c7] siw_touch 5-0028: start dts parsing
+[ 2634.324532] [c7] siw_touch 5-0028: flags(of) = 0x00000000 (0x00000000, 0x00000000)
+[ 2634.332092] [c7] siw_touch 5-0028: of gpio  : reset-gpio(0x1), 23
+[ 2634.338156] [c7] siw_touch 5-0028: of gpio  : irq-gpio, 22
+[ 2634.343623] [c7] siw_touch 5-0028: irqflags(of) = 0x00002002 (0x00002002, 0x00002002)
+[ 2634.358122] [c7] siw_touch 5-0028: (W) of_string : panel_spec not found
+[ 2634.364707] [c7] siw_touch 5-0028: (W) of_string : panel_spec_mfts not found
+[ 2634.371734] [c7] siw_touch 5-0028: of_string : prd_in_file, /sdcard/siw/sw17700_test_spec_V0.1.txt
+[ 2634.380671] [c7] siw_touch 5-0028: prd file setup: /sdcard/siw/prd_in.txt -> /sdcard/siw/sw17700_test_spec_V0.1.txt
+[ 2634.391081] [c7] siw_touch 5-0028: of_string : prd_in_file_m, /sdcard/siw/sw17700_test_spec_mfts_V0.1.txt
+[ 2634.400627] [c7] siw_touch 5-0028: prd file setup: /sdcard/siw/prd_in_mfts.txt -> /sdcard/siw/sw17700_test_spec_mfts_V0.1.txt
+[ 2634.411910] [c7] siw_touch 5-0028: of_string : prd_out_file, /sdcard/siw/touch_self_test.txt
+[ 2634.420322] [c7] siw_touch 5-0028: prd file setup: /sdcard/siw/prd_out.txt -> /sdcard/siw/touch_self_test.txt
+[ 2634.430220] [c7] siw_touch 5-0028: (W) of_string : prd_out_file_mo_aat not found
+[ 2634.437590] [c7] siw_touch 5-0028: (W) of_string : prd_out_file_mo_mfo not found
+[ 2634.444965] [c7] siw_touch 5-0028: (W) of_string : prd_out_file_mo_mfl not found
+[ 2634.452339] [c7] siw_touch 5-0028: (W) of_string : prd_out_file_mo_mcv not found
+[ 2634.459714] [c7] siw_touch 5-0028: [caps summary]
+[ 2634.464399] [c7] siw_touch 5-0028:  max_x           = 1280
+[ 2634.469865] [c7] siw_touch 5-0028:  max_y           = 720
+[ 2634.475243] [c7] siw_touch 5-0028:  max_pressure    = 255
+[ 2634.480625] [c7] siw_touch 5-0028:  max_width       = 15
+[ 2634.485916] [c7] siw_touch 5-0028:  max_orientation = 1
+[ 2634.491121] [c7] siw_touch 5-0028:  max_id          = 10
+[ 2634.496420] [c7] siw_touch 5-0028:  mt_slots_flags  = 0x0
+[ 2634.501795] [c7] siw_touch 5-0028:  hw_reset_delay  = 210 ms
+[ 2634.507435] [c7] siw_touch 5-0028:  sw_reset_delay  = 90 ms
+[ 2634.512988] [c7] siw_touch 5-0028: [role summary]
+[ 2634.517674] [c7] siw_touch 5-0028:  use_firmware    = 0
+[ 2634.522878] [c7] siw_touch 5-0028:  use_fw_upgrade  = 0
+[ 2634.528348] [c7] siw_touch 5-0028: input cfg status : __SIW_CONFIG_INPUT_ANDROID
+[ 2634.535999] [c7] input: siw_touch_input as /devices/virtual/input/input33
+[ 2634.549406] [c7] siw_touch 5-0028: input device[input33, i2c-5/5-0028 - siw_touch_input] registered
+[ 2634.568360] [c7] siw_touch 5-0028: input caps : 1280, 720, 255, 15, 15, 1, 10, 0, 0x0
+[ 2634.576168] [c7] siw_touch 5-0028: touch proc created
+[ 2634.581221] [c7] siw_touch 5-0028: init_late_work triggered, 500 msec(-1, 5A5Ah)
+[ 2634.588565] [c7] siw_touch 5-0028: probe(normal) done (init_late on)
+[ 2634.776445] [c1] siw_touch 5-0028: trigger init_late(5A5Ah)
+[ 2634.793828] [c1] siw_touch 5-0028: trigger gpio reset
+[ 2635.011379] [c2] siw_touch 5-0028: [opt summary]
+[ 2635.014518] [c2] siw_touch 5-0028:  f_flex_report   : 1
+[ 2635.019774] [c2] siw_touch 5-0028:  t_boot_mode     : 2
+[ 2635.024968] [c2] siw_touch 5-0028:  t_sts_mask      : 5
+[ 2635.030157] [c2] siw_touch 5-0028:  t_sw_rst        : 4
+[ 2635.035364] [c2] siw_touch 5-0028:  t_chk_frame     : 3
+[ 2635.040568] [c2] siw_touch 5-0028:  pwr_s_delay     : 1 ms
+[ 2635.046062] [c2] siw_touch 5-0028:  pwr_g_delay     : 1 ms
+[ 2635.051503] [c2] siw_touch 5-0028:  drv_reset_low   : 10 ms
+[ 2635.057053] [c2] siw_touch 5-0028:  drv_delay       : 20 ms
+[ 2635.062605] [c2] siw_touch 5-0028: [tc cmd set] (mode bit 0048h)
+[ 2635.068592] [c2] siw_touch 5-0028:  FFFFFFFFh [U0           ] (not granted)
+[ 2635.075537] [c2] siw_touch 5-0028:  FFFFFFFFh [U2_UNBLANK   ] (not granted)
+[ 2635.082594] [c4] siw_touch 5-0028:  FFFFFFFFh [U2           ] (not granted)
+[ 2635.089438] [c4] siw_touch 5-0028:  0085h [U3           ]
+[ 2635.094887] [c4] siw_touch 5-0028:  FFFFFFFFh [U3_PARTIAL   ] (not granted)
+[ 2635.103863] [c4] siw_touch 5-0028:  FFFFFFFFh [U3_QUICKCOVER] (not granted)
+[ 2635.109369] [c4] siw_touch 5-0028:  0002h [STOP         ]
+[ 2635.114919] [c4] siw_touch 5-0028: touch proc(z) created
+[ 2635.120134] [c4] siw_touch 5-0028: SW17700 sysfs registered
+[ 2635.126172] [c4] siw_touch 5-0028: siw misc register done (36)
+[ 2635.131504] [c4] siw_touch 5-0028: [noop] add_sysfs_cmd noop
+[ 2635.137138] [c4] siw_touch 5-0028: init pm - none
+[ 2635.142075] [c4] siw_touch 5-0028: threaded irq request done(512, siw_touch, 0x2002)
+[ 2635.149560] [c4] siw_touch 5-0028: irq(512) disabled
+[ 2635.154493] [c4] siw_touch 5-0028: init_late done(5A5Ah)
+[ 2635.159784] [c4] siw_touch 5-0028: init_late_work done
+[ 2636.706417] [c0] siw_touch 5-0028: SW17700 init work start(vA0.01b)
+[ 2636.719466] [c0] siw_touch 5-0028: chip frame count 29
+[ 2636.725306] [c0] siw_touch 5-0028: report type  : 1
+[ 2636.728742] [c0] siw_touch 5-0028: status type  : 2
+[ 2636.733610] [c0] siw_touch 5-0028: status mask  : 0050A6E0h
+[ 2636.739155] [c0] siw_touch 5-0028:  normal      : 005080E0h
+[ 2636.745832] [c0] siw_touch 5-0028:  logging     : 0050A000h
+[ 2636.750257] [c0] siw_touch 5-0028:  reset       : 000006E0h
+[ 2636.755846] [c0] siw_touch 5-0028:  ic normal   : 000003F5h
+[ 2636.762423] [c0] siw_touch 5-0028:  ic abnormal : 00000000h
+[ 2636.766909] [c0] siw_touch 5-0028:  ic error    : 0000000Ah
+[ 2636.772469] [c0] siw_touch 5-0028:  ic valid    : 000003FFh
+[ 2636.778051] [c0] siw_touch 5-0028:  ic disp err : 00000000h
+[ 2636.783590] [c0] siw_touch 5-0028:  ic debug    : 00000000h
+[ 2636.789236] [c6] siw_touch 5-0028: [T] chip id 1770, version v0.01 (0x04120001, 0x15)
+[ 2636.796990] [c6] siw_touch 5-0028: [T] product id LA102WH3, flash boot idle(done), crc ok (0x00000022)
+[ 2636.807290] [c6] siw_touch 5-0028: [SW17700] IC info is good: 18, 4
+[ 2636.813306] [c6] siw_touch 5-0028: current driving mode is U3
+[ 2636.818630] [c6] siw_touch 5-0028: DDI Display Mode[010Ch] = 0x00000001
+[ 2636.825206] [c6] siw_touch 5-0028: TC Driving[0C03h] wr 0x00000085
+[ 2636.851857] [c6] siw_touch 5-0028: command done: mode 3, running_sts 07h
+[ 2636.857105] [c6] siw_touch 5-0028: tc driving(0): lcd_mode 3, driving_mode 3
+[ 2636.864141] [c6] siw_touch 5-0028: prd: SW17700[LA102WH3] param not found
+[ 2636.872394] [c6] siw_touch 5-0028: alive level: Lv.7 (1500 ms)
+[ 2636.876770] [c6] siw_touch 5-0028: alive init [0x274, 1, 7, 10, 0]
+[ 2636.882928] [c6] siw_touch 5-0028: SW17700 init done
+[ 2636.887908] [c6] siw_touch 5-0028: irq(512) enabled
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+

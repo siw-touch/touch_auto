@@ -1,0 +1,62 @@
+
+---------------------------------------------------------------------------------------------------
+
+[  343.364262] [c3] siw_touch 5-0028: Manual F/W upgrade with echo
+[  343.368811] [c1] siw_touch 5-0028: FW upgrade work func
+[  343.368971] [c3] siw_touch 5-0028: Manual F/W upgrade with {root}/sdcard/LA102WH3_SL01_0_01.img
+[  343.382705] [c1] siw_touch 5-0028: irq(512) disabled
+[  343.387610] [c1] siw_touch 5-0028: FW upgrade: status 1(BUSY)
+[  343.393299] [c1] siw_touch 5-0028: fw type: FW_TYPE_1
+[  343.398337] [c1] siw_touch 5-0028: getting fw from file
+[  343.403565] [c1] siw_touch 5-0028: target fw: /sdcard/LA102WH3_SL01_0_01.img (abs)
+[  343.412660] [c1] siw_touch 5-0028: fw size: 65536
+[  343.415903] [c1] siw_touch 5-0028: FW compare: bin-ver: 0.01(0) (LA102WH3)(0)
+[  343.423050] [c1] siw_touch 5-0028: FW compare: dev-ver: 0.01(0) (LA102WH3)
+[  343.429899] [c1] siw_touch 5-0028: FW compare: up 01, fup 08
+[  343.435924] [c0] siw_touch 5-0028: FW upgrade: TC stop(0C03h, 0x00000002)
+[  343.471501] [c6] siw_touch 5-0028: alive PAUSE_FWUP(3)
+[  343.475171] [c6] siw_touch 5-0028: alive mon stops
+[  343.581487] [c6] siw_touch 5-0028: ===== FW upgrade: start (0) =====
+[  343.586395] [c6] siw_touch 5-0028: FW upgrade: idx 246h, dn 24Dh, code BBh
+[  343.593245] [c6] siw_touch 5-0028: FW upgrade: not include conf data
+[  343.940341] [c0] siw_touch 5-0028: FW upgrade: downloading...(12%)
+[  344.285067] [c0] siw_touch 5-0028: FW upgrade: downloading...(25%)
+[  344.629719] [c0] siw_touch 5-0028: FW upgrade: downloading...(37%)
+[  344.974527] [c0] siw_touch 5-0028: FW upgrade: downloading...(50%)
+[  345.319313] [c0] siw_touch 5-0028: FW upgrade: downloading...(62%)
+[  345.663933] [c0] siw_touch 5-0028: FW upgrade: downloading...(75%)
+[  346.008776] [c0] siw_touch 5-0028: FW upgrade: downloading...(87%)
+[  346.353577] [c0] siw_touch 5-0028: FW upgrade: downloading...(100%)
+[  346.381871] [c0] siw_touch 5-0028: FW upgrade: boot check done
+[  347.326835] [c0] siw_touch 5-0028: FW upgrade: code check done
+[  347.331592] [c0] siw_touch 5-0028: ===== FW upgrade: done (0) =====
+[  347.337515] [c0] siw_touch 5-0028: FW upgrade: status 0(OK)
+
+//Auto-reset after FW upgrade
+[  347.343028] [c0] siw_touch 5-0028: alive PAUSE_RESET(1)
+[  347.348232] [c0] siw_touch 5-0028: SW17700 reset control(0x1)
+[  347.355105] [c0] siw_touch 5-0028: HW Reset(Async)
+[  347.358728] [c0] siw_touch 5-0028: (W) (warn) already irq disabled
+[  349.131441] [c0] siw_touch 5-0028: SW17700 init work start(vA0.01b)
+[  349.136235] [c0] siw_touch 5-0028: (W) already alive pause[2] state
+[  349.152436] [c0] siw_touch 5-0028: [T] chip id 1770, version v0.01 (0x04120001, 0x15)
+[  349.158823] [c0] siw_touch 5-0028: [T] product id LA102WH3, flash boot idle(done), crc ok (0x00000022)
+[  349.168955] [c0] siw_touch 5-0028: [SW17700] IC info is good: 18, 4
+[  349.175117] [c0] siw_touch 5-0028: current driving mode is U3
+[  349.180474] [c0] siw_touch 5-0028: DDI Display Mode[010Ch] = 0x00000001
+[  349.188202] [c0] siw_touch 5-0028: TC Driving[0C03h] wr 0x00000085
+[  349.216815] [c0] siw_touch 5-0028: command done: mode 3, running_sts 07h
+[  349.222062] [c0] siw_touch 5-0028: tc driving(0): lcd_mode 3, driving_mode 3
+[  349.230062] [c0] siw_touch 5-0028: alive level: Lv.7 (1500 ms)
+[  349.234910] [c0] siw_touch 5-0028: alive RESUME(0)
+[  349.239677] [c0] siw_touch 5-0028: alive mon[2000 msec for Lv.7] begins
+[  349.246268] [c0] siw_touch 5-0028: alive init [0x274, 1, 7, 10, 1]
+[  349.253491] [c0] siw_touch 5-0028: SW17700 init done
+[  349.257470] [c0] siw_touch 5-0028: irq(512) enabled
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
