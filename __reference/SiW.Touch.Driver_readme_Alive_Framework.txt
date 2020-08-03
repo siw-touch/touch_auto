@@ -1,0 +1,111 @@
+[Last updated : 2020.07.31]
+
+###################################################################################################
+# Outline                                                                                         #
+###################################################################################################
+
+#define __SIW_SUPPORT_ALIVE_DETECTION
+
+The alive signal is one of FW operation that sends a periodic interrupt to host side.
+The driver can sense this signal via TC_STATUS and judge if the touch side is normal state or not.
+
+###################################################################################################
+#  Alive Framework                                                                                #
+###################################################################################################
+* Main functions
+- siw_hal_alive_init
+  : Initialization alive control
+    But, this alive scheme is optional operation which depends on chipset & FW
+    <Base parameter>
+    chip->alive_reg       : Control register
+    chip->alive_level_min : minimum level
+    chip->alive_level_def : default level
+    chip->alive_level_max : maximum level
+
+    siw_hal_alive_init > __alive_setup > fquirks->alive_setup
+    -> It has no alive operation without fquirks->alive_setup
+    -> (ex.) sw17700_alive_setup in touch_sw17700.c
+
+- siw_hal_alive_check
+  : Alive detection via irq_type[19:16] of TC_STATUS parsing. Called in irq handler.
+
+    siw_hal_irq_handler > siw_hal_alive_check > case TC_STS_IRQ_TYPE_ALIVE(8)  : Alive signal
+                                                case TC_STS_IRQ_TYPE_REPORT(5) : Normal touch event
+
+- siw_hal_alive_level_set
+  : Set alive singal period. Default is Lv.7 (1.5 sec)
+
+    <siw_touch_hal.h>
+    static const char *__alive_level_strs[] = {
+        "(not supported)",
+        "Lv.1 (500 ms)",
+        "Lv.2 (660 ms)",
+        "Lv.3 (830 ms)",
+        "Lv.4 (1000 ms)",
+        "Lv.5 (1160 ms)",
+        "Lv.6 (1330 ms)",
+        "Lv.7 (1500 ms)",  <---
+        "Lv.8 (1660 ms)",
+        "Lv.9 (1820 ms)",
+        "Lv.10 (2000 ms)",
+    };
+
+- siw_hal_alive_pause_set
+  : Pause control for specific cases. Ex) Reset, FW upgrade, ...
+
+- siw_hal_alive_pause_get
+  : Current Pause state
+
+- siw_hal_alive_is_active
+  : Alive activation status. When FW or chipset doesn't support it, it returns deactivation flag.
+
+###################################################################################################
+#  Alive Monitoring for Recovery                                                                  #
+###################################################################################################
+* This supports the alive timeout monitoring
+- siw_hal_alive_mon_init > __alive_mon_init
+  : Initialization alive monitoring
+
+    This uses a delayed work for timeout detection : chip->alive_mon_work & __alive_mon_work
+    The __alive_mon_work works with 'a designated delay for each level' and
+    checks if a valid IRQ is detected or not via 'chip->alive_irq_detect'.
+    * Designated delay : 2 sec for Lv.1 ~ Lv. 8
+                         3 sec for Lv.9 ~ Lv. 10
+
+    If 'chip->alive_irq_detect' is zero after timeout, it runs reset precedure.
+    Otherwise, it just clears 'chip->alive_irq_detect' and calls delayed work again.
+
+- siw_hal_alive_mon_check > __alive_mon_check
+  : Alive detection called in siw_hal_alive_check
+
+    When the irq_type[19:16] of TC_STATUS is TC_STS_IRQ_TYPE_ALIVE(8) or TC_STS_IRQ_TYPE_REPORT(5),
+    'chip->alive_irq_detect' is set as 1.
+
+- siw_hal_alive_mon_run > __alive_mon_run(__alive_mon_do_run)
+  : Run alive monitoring. This is used in siw_hal_alive_pause_set & siw_hal_alive_level_set(for refresh).
+
+- siw_hal_alive_mon_stop > __alive_mon_stop(__alive_mon_do_stop)
+  : Stop alive monitoring. This is used in siw_hal_alive_pause_set.
+
+
+* For user-designed specific case, it also suppports external quirk interface.
+  
+  <siw_touch.h>
+  struct siw_touch_fquirks {
+      ...
+      int (*alive_mon_init)(struct device *dev);
+      int (*alive_mon_free)(struct device *dev);
+      int (*alive_mon_run)(struct device *dev, int restart);
+      int (*alive_mon_stop)(struct device *dev);
+      int (*alive_mon_check)(struct device *dev, int irq_type);
+      ...
+  };
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+
+
