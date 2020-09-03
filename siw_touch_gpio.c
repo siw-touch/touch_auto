@@ -224,23 +224,31 @@ int siw_touch_gpio_get_value(struct device *dev, int pin)
 }
 
 #if defined(__SIW_SUPPORT_PWRCTRL)
-#define PWR_VDD_REG_NAME		"vdd"
-#define PWR_VIO_REG_NAME		"vio"
-
 /*
- * [DTS example 1]
+ * [DTS example for regulator setup]
+ * <Case 1 : Indirect lookup>
  * chip_flags = <0x400>;	//TOUCH_USE_PWRCTL
  * vdd-type = <1>;
  * vdd-supply = <&ldo4_reg>;	//Indirect lookup
- * vdd-voltage = <3200000>;
+ * vdd-voltage = <3300000>;		//value = 0 : use default setup
+ *                              //value > 0 : custom value
+ * vio-type = <1>;
+ * vio-supply = <&ldo5_reg>;
+ * vio-voltage = <1800000>;
  *
- * [DTS example 2]
+ * <Case 1 : Direct lookup>
  * chip_flags = <0x400>;
  * vdd-type = <1>;
  * vdd-name = "vdd_ldo4";		//Direct lookup for regulator-name
- * vdd-voltage = <3200000>;
+ * vdd-voltage = <3300000>;
+ * vio-type = <1>;
+ * vio-name = "vio_ldo5";
+ * vio-voltage = <1800000>;
  *
  */
+#define PWR_VDD_REG_NAME		"vdd"
+#define PWR_VIO_REG_NAME		"vio"
+
 static int __siw_touch_regulator_set(struct device *dev,
 			void **reg, char *name, int voltage, int load)
 {
@@ -412,6 +420,15 @@ static void __siw_touch_power_do_ctrl_reg(struct device *dev, int value, struct 
 		name, (regulator_is_enabled(reg)) ? "enabled" : "disabled");
 }
 
+/*
+ * [DTS example for gpio setup]
+ * chip_flags = <0x400>;	//TOUCH_USE_PWRCTL
+ * vdd-type = <2>;
+ * vdd-gpio = <&gpx2 2 GPIO_ACTIVE_HIGH>;
+ * vio-type = <2>;
+ * vio-gpio = <&gpx2 3 GPIO_ACTIVE_HIGH>;
+ *
+ */
 #define PWR_VDD_PIN_NAME		"touch-vdd"
 #define PWR_VIO_PIN_NAME		"touch-vio"
 
@@ -620,6 +637,12 @@ static void siw_touch_power_cfg(struct device *dev)
 	struct touch_pins *pins = &ts->pins;
 	struct touch_pwr_con *con = NULL;
 	struct touch_pwr_cfg *cfg = NULL;
+	int limit_vdd = 3300000;
+#if defined(__SIW_PANEL_CLASS_AUTO)
+	int limit_vio = 3300000;
+#else
+	int limit_vio = 1800000;
+#endif
 
 	/*
 	 * vdd setup
@@ -641,8 +664,11 @@ static void siw_touch_power_cfg(struct device *dev)
 		con->free = __siw_touch_power_do_free_reg;
 		con->ctrl = __siw_touch_power_do_ctrl_reg;
 
-		if (!cfg->voltage) {
-			cfg->voltage = 3300000;
+		if (cfg->voltage > limit_vdd) {
+			t_dev_warn(dev,
+				"vdd voltage is too big, so adjusted, %d -> %d\n",
+				cfg->voltage, limit_vdd);
+			cfg->voltage = limit_vdd;
 		}
 		break;
 	case PWR_TYPE_GPIO:
@@ -673,12 +699,11 @@ static void siw_touch_power_cfg(struct device *dev)
 		con->free = __siw_touch_power_do_free_reg;
 		con->ctrl = __siw_touch_power_do_ctrl_reg;
 
-		if (!cfg->voltage) {
-		#if defined(__SIW_PANEL_CLASS_AUTO)
-			cfg->voltage = 3300000;
-		#else	/* !__SIW_PANEL_CLASS_AUTO */
-			cfg->voltage = 1800000;
-		#endif	/* __SIW_PANEL_CLASS_AUTO */
+		if (cfg->voltage > limit_vio) {
+			t_dev_warn(dev,
+				"vio voltage is too big, so adjusted, %d -> %d\n",
+				cfg->voltage, limit_vio);
+			cfg->voltage = limit_vio;
 		}
 		break;
 	case PWR_TYPE_GPIO:
