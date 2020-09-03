@@ -142,6 +142,16 @@ static void siw_touch_finger_report_event(struct siw_ts *ts)
 						tdata->y,
 						tdata->pressure);
 			}
+			else {
+				t_dev_dbg_button_m(dev, "%s: <%d> %d finger move <%d> (%4d, %4d, %4d)\n",
+						dev_name(idev),
+						event_cnt,
+						tcount,
+						i,
+						tdata->x,
+						tdata->y,
+						tdata->pressure);
+			}
 
 			continue;
 		}
@@ -183,7 +193,7 @@ void siw_touch_finger_report_all_event(struct siw_ts *ts)
 		ts->intr_status = TOUCH_IRQ_FINGER;
 		siw_touch_finger_report_event(ts);
 		ts->tcount = 0;
-		memset(ts->tdata, 0, sizeof(struct touch_data) * touch_max_finger(ts));
+		memset(ts->tdata, 0, sizeof(ts->tdata));
 	}
 	ts->is_cancel = 0;
 }

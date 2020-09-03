@@ -23,7 +23,7 @@ enum _SIW_TOUCH_DBG_FLAG {
 	//
 	DBG_BUTTON				= (1U << 4),
 	DBG_FW_UPGRADE			= (1U << 5),
-	DBG_GHOST			= (1U << 6),
+	DBG_BUTTON_M			= (1U << 6),
 	DBG_IRQ					= (1U << 7),
 	//
 	DBG_PM					= (1U << 8),
@@ -174,8 +174,8 @@ extern u32 t_dev_dbg_mask;
 #define t_dev_dbg_fwup(_dev, fmt, args...)	\
 		t_dev_dbg(DBG_FW_UPGRADE, _dev, fmt, ##args)
 
-#define t_dev_dbg_ghost(_dev, fmt, args...)	\
-		t_dev_dbg(DBG_GHOST, _dev, fmt, ##args)
+#define t_dev_dbg_button_m(_dev, fmt, args...)	\
+		t_dev_dbg(DBG_BUTTON_M, _dev, fmt, ##args)
 
 #define t_dev_dbg_irq(_dev, fmt, args...)	\
 		t_dev_dbg(DBG_IRQ, _dev, fmt, ##args)
