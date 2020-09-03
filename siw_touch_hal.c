@@ -1375,15 +1375,16 @@ static void __alive_mon_work(struct work_struct *work)
 		t_dev_err(dev, "alive mon detects no irq (%d), trigger reset\n",
 			chip->driving_mode);
 
+		mutex_unlock(&chip->alive_mon_lock);
+
 		siw_hal_reset_ctrl(dev, HW_RESET_ASYNC);
-		goto out;
+		return;
 	}
 
 	t_alive_dbg_base(dev, "alive mon ok\n");
 
 	__alive_mon_do_run(dev, 0);
 
-out:
 	mutex_unlock(&chip->alive_mon_lock);
 }
 
