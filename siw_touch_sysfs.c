@@ -831,14 +831,7 @@ static void siw_touch_do_del_sysfs(struct siw_ts *ts)
 int siw_touch_add_sysfs(struct siw_ts *ts)
 {
 	struct device *dev = ts->dev;
-	struct device *idev = &ts->input->dev;
-	struct kobject *kobj = &ts->kobj;
 	int ret = 0;
-
-	if (kobj->parent != idev->kobj.parent) {
-		t_dev_err(dev, "Invalid kobject\n");
-		return -EINVAL;
-	}
 
 	ret = siw_touch_do_add_sysfs(ts);
 	if (ret < 0) {
@@ -853,13 +846,6 @@ int siw_touch_add_sysfs(struct siw_ts *ts)
 void siw_touch_del_sysfs(struct siw_ts *ts)
 {
 	struct device *dev = ts->dev;
-	struct device *idev = &ts->input->dev;
-	struct kobject *kobj = &ts->kobj;
-
-	if (kobj->parent != idev->kobj.parent) {
-		t_dev_warn(dev, "Invalid kobject\n");
-		return;
-	}
 
 	siw_touch_misc_free(dev);
 
