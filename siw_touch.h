@@ -41,7 +41,7 @@
 #include "siw_touch_dbg.h"
 
 
-#define SIW_DRV_VERSION		"vA0.01b"
+#define SIW_DRV_VERSION		"vA0.01b-f2"
 
 enum {
 	SIW_TOUCH_NORMAL_MODE	= 0,
