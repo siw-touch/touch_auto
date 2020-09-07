@@ -1354,6 +1354,24 @@ static void __alive_mon_run(struct device *dev, int restart)
 	mutex_unlock(&chip->alive_mon_lock);
 }
 
+static int __alive_mon_work_skip(struct device *dev)
+{
+	struct siw_touch_chip *chip = to_touch_chip(dev);
+
+	if (siw_hal_access_not_allowed(dev, "alive mon", 0))
+		return 1;
+
+	if (chip->lcd_mode != LCD_MODE_U3) {
+		return 1;
+	}
+
+	if (chip->driving_mode != LCD_MODE_U3) {
+		return 1;
+	}
+
+	return 0;
+}
+
 static void __alive_mon_work(struct work_struct *work)
 {
 	struct siw_touch_chip *chip =
@@ -1363,6 +1381,9 @@ static void __alive_mon_work(struct work_struct *work)
 	int do_reset = 0;
 
 	if (!chip->alive_mon || !chip->alive_mon_init)
+		return;
+
+	if (__alive_mon_work_skip(dev))
 		return;
 
 	mutex_lock(&chip->alive_mon_lock);
